@@ -1,18 +1,20 @@
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
 import { defaultStyles } from '@/styles'
+import { AudioProTrack } from '@/types/audioProTypes'
 import FastImage from '@d11/react-native-fast-image'
 import { Entypo } from '@expo/vector-icons'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
-import { Track, useActiveTrack } from 'react-native-track-player'
+import { useAudioPro } from 'react-native-audio-pro'
 
 export type TrackListItemProps = {
-	track: Track
-	onTrackSelect: (track: Track) => void
+	track: AudioProTrack
+	onTrackSelect: (track: AudioProTrack) => void
 }
 
 export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
-	const isActiveTrack = useActiveTrack()?.url === track.url
+	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
+	const isActiveTrack = playingTrack?.id === track.id
 
 	return (
 		<TouchableHighlight onPress={() => handleTrackSelect(track)}>

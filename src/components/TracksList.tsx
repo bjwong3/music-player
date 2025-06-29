@@ -1,10 +1,13 @@
 import { utilsStyles } from '@/styles'
+import { AudioProTrack } from '@/types/audioProTypes'
+import { useState } from 'react'
 import { FlatList, FlatListProps, View } from 'react-native'
-import { Track } from 'react-native-track-player'
+import { useAudioPro } from 'react-native-audio-pro'
+import { AudioPro } from '../helpers/audioPro'
 import { TrackListItem } from './TrackListItem'
 
 export type TracksListProps = Partial<FlatListProps<unknown>> & {
-	tracks: Track[]
+	tracks: AudioProTrack[]
 }
 
 const ItemDivider = () => (
@@ -12,8 +15,19 @@ const ItemDivider = () => (
 )
 
 export const TracksList = ({ tracks, ...flatListProps }: TracksListProps) => {
-	const handleTrackSelect = (track: Track) => {
+	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
+	const [needsTrackLoad, setNeedsTrackLoad] = useState(true)
+	const [autoPlay, setAutoPlay] = useState(true)
+
+	const handleTrackSelect = (track: AudioProTrack) => {
 		console.log(track)
+
+		// If stopped, or we need to load a new track, play the current track
+		AudioPro.play(track, {
+			autoPlay,
+			// startTimeMs: 60000,
+		})
+		setNeedsTrackLoad(false)
 	}
 
 	return (
