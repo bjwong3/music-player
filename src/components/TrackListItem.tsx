@@ -1,11 +1,13 @@
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
+import { AudioProState } from '@/helpers/audioProValues'
 import { defaultStyles } from '@/styles'
 import { AudioProTrack } from '@/types/audioProTypes'
 import FastImage from '@d11/react-native-fast-image'
-import { Entypo } from '@expo/vector-icons'
+import { Entypo, Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { useAudioPro } from 'react-native-audio-pro'
+import LoaderKitView from 'react-native-loader-kit'
 
 export type TrackListItemProps = {
 	track: AudioProTrack
@@ -15,6 +17,7 @@ export type TrackListItemProps = {
 export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 	const isActiveTrack = playingTrack?.id === track.id
+	const isPlaying = state === AudioProState.PLAYING
 
 	return (
 		<TouchableHighlight onPress={() => handleTrackSelect(track)}>
@@ -30,6 +33,22 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 							opacity: isActiveTrack ? 0.6 : 1,
 						}}
 					/>
+
+					{isActiveTrack &&
+						(isPlaying ? (
+							<LoaderKitView
+								style={styles.trackPlayingIconIndicator}
+								name="LineScaleParty"
+								color={colors.icon}
+							/>
+						) : (
+							<Ionicons
+								style={styles.trackPausedIconIndicator}
+								name="play"
+								size={24}
+								color={colors.icon}
+							/>
+						))}
 				</View>
 
 				{/* Track title and artist */}
@@ -59,7 +78,7 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 						)}
 					</View>
 
-					<Entypo name="dots-three-horizontal" />
+					<Entypo name="dots-three-horizontal" size={20} style={{ color: 'white' }} />
 				</View>
 			</View>
 		</TouchableHighlight>
@@ -89,5 +108,17 @@ const styles = StyleSheet.create({
 		columnGap: 14,
 		alignItems: 'center',
 		paddingRight: 20,
+	},
+	trackPlayingIconIndicator: {
+		position: 'absolute',
+		top: 14,
+		left: 14,
+		width: 24,
+		height: 24,
+	},
+	trackPausedIconIndicator: {
+		position: 'absolute',
+		top: 14,
+		left: 14,
 	},
 })

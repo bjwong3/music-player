@@ -41,22 +41,22 @@ export function setupAudioPro(): void {
 	})
 }
 
-function playNextTrack(autoPlay: boolean = true): void {
+export function playNextTrack(): void {
 	if (playlist.length === 0) return
 
 	currentIndex = (currentIndex + 1) % playlist.length
 	const nextTrack = playlist[currentIndex]
 
-	AudioPro.play(nextTrack, { autoPlay })
+	AudioPro.play(nextTrack, { autoPlay: true })
 }
 
-function playPreviousTrack(autoPlay: boolean = true): void {
+export function playPreviousTrack(): void {
 	if (playlist.length === 0) return
 
 	currentIndex = currentIndex > 0 ? currentIndex - 1 : playlist.length - 1
 	const prevTrack = playlist[currentIndex]
 
-	AudioPro.play(prevTrack, { autoPlay })
+	AudioPro.play(prevTrack, { autoPlay: true })
 }
 
 export function getCurrentTrackIndex(): number {

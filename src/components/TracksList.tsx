@@ -1,3 +1,4 @@
+import { setCurrentTrackIndex } from '@/app/player-service'
 import { utilsStyles } from '@/styles'
 import { AudioProTrack } from '@/types/audioProTypes'
 import { useState } from 'react'
@@ -27,6 +28,7 @@ export const TracksList = ({ tracks, ...flatListProps }: TracksListProps) => {
 			autoPlay,
 			// startTimeMs: 60000,
 		})
+		setCurrentTrackIndex(Number(track.id) - 1)
 		setNeedsTrackLoad(false)
 	}
 
@@ -36,7 +38,7 @@ export const TracksList = ({ tracks, ...flatListProps }: TracksListProps) => {
 			data={tracks}
 			ItemSeparatorComponent={ItemDivider}
 			ListFooterComponent={ItemDivider}
-			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
+			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128, marginHorizontal: 20 }}
 		/>
 	)
 }

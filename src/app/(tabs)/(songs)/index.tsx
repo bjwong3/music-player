@@ -1,10 +1,10 @@
 import library from '@/assets/data/library.json'
 import { TracksList } from '@/components/TracksList'
-import { colors, screenPadding } from '@/constants/tokens'
+import { colors } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { useMemo } from 'react'
-import { ScrollView, View } from 'react-native'
+import { View } from 'react-native'
 
 const SongsScreen = () => {
 	const search = useNavigationSearch({
@@ -24,16 +24,11 @@ const SongsScreen = () => {
 			style={{
 				flex: 1,
 				paddingTop: 110,
-				paddingBottom: 100,
+				paddingBottom: 30,
 				backgroundColor: colors.background,
 			}}
 		>
-			<ScrollView
-				contentInsetAdjustmentBehavior="automatic"
-				style={{ paddingHorizontal: screenPadding.horizontal }}
-			>
-				<TracksList tracks={filteredSongs} scrollEnabled={false} />
-			</ScrollView>
+			<TracksList tracks={filteredSongs} scrollEnabled={false} />
 		</View>
 	)
 }

@@ -215,6 +215,16 @@ const RootNavigation = () => {
 	return (
 		<Stack>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+			<Stack.Screen
+				name="player"
+				options={{
+					presentation: 'card',
+					animation: 'slide_from_bottom',
+					animationDuration: 100,
+					headerShown: false,
+				}}
+			/>
 		</Stack>
 	)
 }
