@@ -23,7 +23,7 @@ const SongsScreen = () => {
 		<View
 			style={{
 				flex: 1,
-				paddingTop: 110,
+				paddingTop: 90,
 				paddingBottom: 30,
 				backgroundColor: colors.background,
 			}}

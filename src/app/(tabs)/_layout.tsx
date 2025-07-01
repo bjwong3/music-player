@@ -21,6 +21,7 @@ const TabsNavigation = () => {
 						borderTopLeftRadius: 20,
 						borderTopRightRadius: 20,
 						borderTopWidth: 0,
+						bottom: 11,
 					},
 					tabBarBackground: () => (
 						<BlurView
@@ -29,9 +30,10 @@ const TabsNavigation = () => {
 							style={{
 								...StyleSheet.absoluteFillObject,
 								overflow: 'hidden',
-								borderTopLeftRadius: 20,
-								borderTopRightRadius: 20,
-								top: -8,
+								borderRadius: 20,
+								top: -10,
+								height: 70,
+								marginHorizontal: 8,
 							}}
 						/>
 					),
@@ -69,7 +71,7 @@ const TabsNavigation = () => {
 					position: 'absolute',
 					left: 8,
 					right: 8,
-					bottom: 95,
+					bottom: 130,
 				}}
 			/>
 		</>

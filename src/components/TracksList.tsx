@@ -38,7 +38,7 @@ export const TracksList = ({ tracks, ...flatListProps }: TracksListProps) => {
 			data={tracks}
 			ItemSeparatorComponent={ItemDivider}
 			ListFooterComponent={ItemDivider}
-			contentContainerStyle={{ paddingTop: 10, paddingBottom: 128, marginHorizontal: 20 }}
+			contentContainerStyle={{ paddingTop: 10, paddingBottom: 160, marginHorizontal: 20 }}
 		/>
 	)
 }
