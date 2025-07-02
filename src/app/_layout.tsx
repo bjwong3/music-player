@@ -9,6 +9,7 @@ import { playlist } from './playlist'
 
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export default function App() {
@@ -126,8 +127,10 @@ export default function App() {
 
 	return (
 		<SafeAreaProvider>
-			<RootNavigation />
-			<StatusBar style="auto" />
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<RootNavigation />
+				<StatusBar style="auto" />
+			</GestureHandlerRootView>
 		</SafeAreaProvider>
 		// <SafeAreaView style={styles.container}>
 		// 	<ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>

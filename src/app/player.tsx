@@ -1,14 +1,21 @@
 import { MovingText } from '@/components/MovingText'
+import { PlayerControls } from '@/components/PlayerControls'
+import { PlayerProgressBar } from '@/components/PlayerProgressBar'
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize, screenPadding } from '@/constants/tokens'
+import { usePlayerBackground } from '@/hooks/usePlayerBackground'
 import { defaultStyles } from '@/styles'
 import FastImage from '@d11/react-native-fast-image'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { useAudioPro } from 'react-native-audio-pro'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const PlayerScreen = () => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
+	const { imageColors } = usePlayerBackground(
+		(playingTrack?.artwork as string) ?? unknownTrackImageUri,
+	)
 
 	const { top, bottom } = useSafeAreaInsets()
 
@@ -20,43 +27,70 @@ const PlayerScreen = () => {
 		)
 	}
 	return (
-		<View style={styles.overlayContainer}>
-			<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }}>
-				<View style={styles.artworkImageContainer}>
-					<FastImage
-						source={{
-							uri: (playingTrack.artwork as string) ?? unknownTrackImageUri,
-							priority: FastImage.priority.high,
-						}}
-						resizeMode="cover"
-						style={styles.artworkImage}
-					/>
-				</View>
+		<LinearGradient
+			style={{ flex: 1 }}
+			colors={
+				imageColors
+					? [imageColors.dominant, imageColors.vibrant]
+					: [colors.background, colors.background]
+			}
+		>
+			<View style={styles.overlayContainer}>
+				<View style={{ flex: 1, marginTop: top + 70, marginBottom: bottom }}>
+					<View style={styles.artworkImageContainer}>
+						<FastImage
+							source={{
+								uri: (playingTrack.artwork as string) ?? unknownTrackImageUri,
+								priority: FastImage.priority.high,
+							}}
+							resizeMode="cover"
+							style={styles.artworkImage}
+						/>
+					</View>
 
-				<View style={{ flex: 1 }}>
-					<View style={{ marginTop: 'auto' }}>
-						<View style={{ height: 60 }}>
-							<View
-								style={{
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									alignItems: 'center',
-								}}
-							>
-								{/* Track Title */}
-								<View style={styles.trackTitleContainer}>
-									<MovingText
-										text={playingTrack.title ?? ''}
-										animationThreshold={30}
-										style={styles.trackTitleText}
-									/>
+					<View style={{ flex: 1 }}>
+						<View style={{ marginTop: 50 }}>
+							<View style={{ height: 60 }}>
+								<View
+									style={{
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										alignItems: 'center',
+									}}
+								>
+									{/* Track Title */}
+									<View style={styles.trackTitleContainer}>
+										<MovingText
+											text={playingTrack.title ?? ''}
+											animationThreshold={30}
+											style={styles.trackTitleText}
+										/>
+									</View>
 								</View>
+
+								{/* Track Artist */}
+								{playingTrack.artist && (
+									<Text
+										numberOfLines={1}
+										style={[
+											styles.trackArtistText,
+											{
+												marginTop: 6,
+											},
+										]}
+									>
+										{playingTrack.artist}
+									</Text>
+								)}
 							</View>
+							<PlayerProgressBar style={{ marginTop: 70 }} />
+
+							<PlayerControls style={{ marginTop: 70 }} />
 						</View>
 					</View>
 				</View>
 			</View>
-		</View>
+		</LinearGradient>
 	)
 }
 

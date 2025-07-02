@@ -2,7 +2,7 @@ import { playNextTrack, playPreviousTrack } from '@/app/player-service'
 import { colors } from '@/constants/tokens'
 import { AudioPro } from '@/helpers/audioPro'
 import { FontAwesome6 } from '@expo/vector-icons'
-import { TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { AudioProState, useAudioPro } from 'react-native-audio-pro'
 
 type PlayerControlsProps = {
@@ -14,7 +14,19 @@ type PlayerButtonProps = {
 	iconSize?: number
 }
 
-export const PlayPauseButton = ({ style, iconSize }: PlayerButtonProps) => {
+export const PlayerControls = ({ style }: PlayerControlsProps) => {
+	return (
+		<View style={[styles.container, style]}>
+			<View style={styles.row}>
+				<PreviousButton />
+				<PlayPauseButton />
+				<NextButton />
+			</View>
+		</View>
+	)
+}
+
+export const PlayPauseButton = ({ style, iconSize = 48 }: PlayerButtonProps) => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 	const playing = state === AudioProState.PLAYING
 
@@ -42,3 +54,14 @@ export const PreviousButton = ({ iconSize = 30 }: PlayerButtonProps) => {
 		</TouchableOpacity>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		width: '100%',
+	},
+	row: {
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+	},
+})
