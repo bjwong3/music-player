@@ -40,9 +40,6 @@ export const PlayerProgressBar = ({ style }: ViewProps) => {
 				containerStyle={utilsStyles.slider}
 				renderBubble={() => null}
 				onSlidingStart={() => (isSliding.value = true)}
-				onValueChange={async (value) => {
-					await AudioPro.seekTo(value * duration)
-				}}
 				onSlidingComplete={async (value) => {
 					// If user isn't sliding, don't update position
 					if (!isSliding.value) return

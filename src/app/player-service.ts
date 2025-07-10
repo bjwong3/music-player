@@ -1,10 +1,17 @@
 import { AudioProContentType, AudioProEvent, AudioProEventType } from 'react-native-audio-pro'
 
+import { unknownTrackImageUri } from '@/constants/images'
+import { TrackWithPlaylist } from '@/helpers/types'
+import { AudioProTrack } from '@/types/audioProTypes'
+import jsmediatags from 'jsmediatags'
+import { PermissionsAndroid } from 'react-native'
+import { readDir } from 'react-native-fs'
 import { AudioPro } from '../helpers/audioPro'
-import { playlist } from './playlist'
 
-// Track the current playlist position
+// Track the current library position
 let currentIndex = 0
+export let library: AudioProTrack[] = []
+export let queue: AudioProTrack[] = []
 
 export function setupAudioPro(): void {
 	// Configure audio settings
@@ -31,7 +38,7 @@ export function setupAudioPro(): void {
 
 			case AudioProEventType.REMOTE_PREV:
 				// Handle previous button press from lock screen/notification
-				playPreviousTrack()
+				playPreviousTrack(0)
 				break
 
 			case AudioProEventType.PLAYBACK_ERROR:
@@ -42,21 +49,26 @@ export function setupAudioPro(): void {
 }
 
 export function playNextTrack(): void {
-	if (playlist.length === 0) return
+	if (queue.length === 0) return
 
-	currentIndex = (currentIndex + 1) % playlist.length
-	const nextTrack = playlist[currentIndex]
+	currentIndex = (currentIndex + 1) % queue.length
+	const nextTrack = queue[currentIndex]
 
 	AudioPro.play(nextTrack, { autoPlay: true })
 }
 
-export function playPreviousTrack(): void {
-	if (playlist.length === 0) return
+export function playPreviousTrack(position: number): void {
+	if (position > 5000) {
+		// If we're more than 5 seconds into the track, seek to beginning
+		AudioPro.seekTo(0)
+	} else {
+		if (queue.length === 0) return
 
-	currentIndex = currentIndex > 0 ? currentIndex - 1 : playlist.length - 1
-	const prevTrack = playlist[currentIndex]
+		currentIndex = currentIndex > 0 ? currentIndex - 1 : queue.length - 1
+		const prevTrack = queue[currentIndex]
 
-	AudioPro.play(prevTrack, { autoPlay: true })
+		AudioPro.play(prevTrack, { autoPlay: true })
+	}
 }
 
 export function getCurrentTrackIndex(): number {
@@ -64,7 +76,7 @@ export function getCurrentTrackIndex(): number {
 }
 
 export function setCurrentTrackIndex(index: number): void {
-	if (index >= 0 && index < playlist.length) {
+	if (index >= 0 && index < queue.length) {
 		currentIndex = index
 	}
 }
@@ -75,4 +87,90 @@ export function getProgressInterval(): number {
 
 export function setProgressInterval(ms: number): void {
 	AudioPro.setProgressInterval(ms)
+}
+
+export function clearQueue(): void {
+	queue = []
+}
+
+export function addNextToQueue(track: AudioProTrack): void {
+	queue.splice(1, 0, track)
+}
+
+export function addToQueue(tracks: AudioProTrack[]): void {
+	queue.push(...tracks)
+}
+export function setQueue(tracks: AudioProTrack[]): void {
+	queue = tracks
+}
+
+const requestExternalStoragePermission = async () => {
+	const readPermission = PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO
+	const hasPermission = await PermissionsAndroid.check(readPermission)
+	if (hasPermission) {
+		console.log('Permission Granted')
+		return true
+	} else {
+		try {
+			const status = await PermissionsAndroid.request(readPermission)
+			if (status === PermissionsAndroid.RESULTS.GRANTED) {
+				console.log('Permission Granted')
+				return true
+			} else {
+				console.log('Permission Denied')
+				return false
+			}
+		} catch (error) {
+			console.error('Permission Request Error: ', error)
+			return false
+		}
+	}
+}
+
+export const getAudioFiles = async (path: string) => {
+	if (await requestExternalStoragePermission()) {
+		try {
+			const result = await readDir(path)
+			const audioFiles = result.filter(
+				(file) =>
+					file.isFile() &&
+					(file.name.endsWith('.mp3') || file.name.endsWith('.wav') || file.name.endsWith('.flac')),
+			)
+
+			library = audioFiles.map((file, index) => {
+				let track: TrackWithPlaylist = {
+					id: String(index),
+					url: 'file://' + file.path,
+					title: file.name.replace('.mp3', ''),
+					artwork: unknownTrackImageUri,
+					artist: 'Unknown Artist',
+					playlist: [],
+				}
+				new jsmediatags.Reader(file.path).setTagsToRead(['title', 'artist', 'picture']).read({
+					onSuccess: (tag) => {
+						const trackTags = tag.tags
+						console.log(trackTags.artist)
+						track.artist = trackTags.artist ?? 'Unknown Artist'
+						track.title = trackTags.title ?? file.name.replace('.mp3', '')
+						// if (trackTags.picture) {
+						// 	let base64String = ''
+						// 	for (let i = 0; i < trackTags.picture.data.length; i++) {
+						// 		base64String += String.fromCharCode(trackTags.picture.data[i])
+						// 	}
+						// 	const img = `data:${trackTags.picture.format};base64,${window.btoa(base64String)}`
+						// 	track.img = img
+						// }
+					},
+					onError: (error) => {
+						console.log('Error')
+						console.log(error)
+					},
+				})
+				return track
+			})
+		} catch (error) {
+			console.error('Directory Read Error: ', error)
+		}
+		return library
+	}
 }

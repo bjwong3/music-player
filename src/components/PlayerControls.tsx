@@ -48,8 +48,9 @@ export const NextButton = ({ iconSize = 30 }: PlayerButtonProps) => {
 }
 
 export const PreviousButton = ({ iconSize = 30 }: PlayerButtonProps) => {
+	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 	return (
-		<TouchableOpacity activeOpacity={0.7} onPress={playPreviousTrack}>
+		<TouchableOpacity activeOpacity={0.7} onPress={() => playPreviousTrack(position)}>
 			<FontAwesome6 name="backward" size={iconSize} color={colors.text} />
 		</TouchableOpacity>
 	)

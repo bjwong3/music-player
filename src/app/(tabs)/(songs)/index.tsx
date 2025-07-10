@@ -1,23 +1,27 @@
-import library from '@/assets/data/library.json'
+import { QueueControls } from '@/components/QueueControls'
 import { TracksList } from '@/components/TracksList'
 import { colors } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
+import { generateTracksListId } from '@/helpers/miscellaneous'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
+import { useTracks } from '@/store/library'
 import { useMemo } from 'react'
 import { View } from 'react-native'
 
 const SongsScreen = () => {
 	const search = useNavigationSearch({
 		searchBarOptions: {
-			placeholder: 'Search',
+			placeholder: 'Search songs',
 		},
 	})
 
-	const filteredSongs = useMemo(() => {
-		if (!search) return library
+	const tracks = useTracks()
 
-		return library.filter(trackTitleFilter(search))
-	}, [search, library])
+	const filteredSongs = useMemo(() => {
+		if (!search) return tracks
+
+		return tracks.filter(trackTitleFilter(search))
+	}, [search, tracks])
 
 	return (
 		<View
@@ -28,7 +32,12 @@ const SongsScreen = () => {
 				backgroundColor: colors.background,
 			}}
 		>
-			<TracksList tracks={filteredSongs} scrollEnabled={false} />
+			<QueueControls tracks={tracks} style={{ marginHorizontal: 20, paddingBottom: 20 }} />
+			<TracksList
+				id={generateTracksListId('songs', search)}
+				tracks={filteredSongs}
+				scrollEnabled={false}
+			/>
 		</View>
 	)
 }

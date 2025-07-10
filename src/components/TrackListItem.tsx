@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 	trackPlayingIconIndicator: {
 		position: 'absolute',
 		top: 14,
-		left: 14,
+		left: 13,
 		width: 24,
 		height: 24,
 	},

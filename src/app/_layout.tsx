@@ -4,17 +4,23 @@ import { useAudioPro } from 'react-native-audio-pro'
 
 import { AudioPro } from '../helpers/audioPro'
 import { AudioProState } from '../helpers/audioProValues'
-import { getCurrentTrackIndex, setCurrentTrackIndex } from './player-service'
-import { playlist } from './playlist'
+import {
+	getAudioFiles,
+	getCurrentTrackIndex,
+	library,
+	setCurrentTrackIndex,
+} from './player-service'
 
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { DownloadDirectoryPath } from 'react-native-fs'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
+getAudioFiles(DownloadDirectoryPath)
 export default function App() {
 	const [currentIndex, setLocalIndex] = useState(getCurrentTrackIndex())
-	const currentTrack = playlist[currentIndex]
+	const currentTrack = library[currentIndex]
 	const { position, duration, state, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 
 	// Sync the local index with the player service
@@ -93,14 +99,14 @@ export default function App() {
 			AudioPro.seekTo(0)
 		} else {
 			// Otherwise, go to previous track
-			const newIndex = currentIndex > 0 ? currentIndex - 1 : playlist.length - 1
+			const newIndex = currentIndex > 0 ? currentIndex - 1 : library.length - 1
 
 			// Update the track index
 			updateCurrentIndex(newIndex)
 
 			// If we're currently playing or paused (but loaded), immediately load the new track
 			if (state === AudioProState.PLAYING || state === AudioProState.PAUSED) {
-				AudioPro.play(playlist[newIndex], {
+				AudioPro.play(library[newIndex], {
 					autoPlay,
 				})
 				setNeedsTrackLoad(false)
@@ -112,12 +118,12 @@ export default function App() {
 	}
 
 	const handleNext = () => {
-		const newIndex = (currentIndex + 1) % playlist.length
+		const newIndex = (currentIndex + 1) % library.length
 		updateCurrentIndex(newIndex)
 
 		// If we're currently playing or paused (but loaded), immediately load the new track
 		if (state === AudioProState.PLAYING || state === AudioProState.PAUSED) {
-			AudioPro.play(playlist[newIndex], { autoPlay })
+			AudioPro.play(library[newIndex], { autoPlay })
 			setNeedsTrackLoad(false)
 		} else {
 			// Otherwise, mark that we need to load the track when play is pressed
@@ -224,7 +230,7 @@ const RootNavigation = () => {
 				options={{
 					presentation: 'card',
 					animation: 'slide_from_bottom',
-					animationDuration: 100,
+					animationDuration: 50,
 					headerShown: false,
 				}}
 			/>

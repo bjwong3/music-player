@@ -1,35 +1,48 @@
-import { setCurrentTrackIndex } from '@/app/player-service'
+import { addNextToQueue, addToQueue, clearQueue, setCurrentTrackIndex } from '@/app/player-service'
+import { TrackWithPlaylist } from '@/helpers/types'
+import { useQueue } from '@/store/queue'
 import { utilsStyles } from '@/styles'
 import { AudioProTrack } from '@/types/audioProTypes'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FlatList, FlatListProps, View } from 'react-native'
-import { useAudioPro } from 'react-native-audio-pro'
 import { AudioPro } from '../helpers/audioPro'
 import { TrackListItem } from './TrackListItem'
 
 export type TracksListProps = Partial<FlatListProps<unknown>> & {
-	tracks: AudioProTrack[]
+	id: string
+	tracks: TrackWithPlaylist[]
 }
 
 const ItemDivider = () => (
 	<View style={{ ...utilsStyles.itemSeparator, marginVertical: 9, marginLeft: 60 }} />
 )
 
-export const TracksList = ({ tracks, ...flatListProps }: TracksListProps) => {
-	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
-	const [needsTrackLoad, setNeedsTrackLoad] = useState(true)
+export const TracksList = ({ id, tracks, ...flatListProps }: TracksListProps) => {
 	const [autoPlay, setAutoPlay] = useState(true)
 
-	const handleTrackSelect = (track: AudioProTrack) => {
-		console.log(track)
+	const queueOffset = useRef(0)
+	const { activeQueueId, setActiveQueueId } = useQueue()
 
-		// If stopped, or we need to load a new track, play the current track
-		AudioPro.play(track, {
-			autoPlay,
-			// startTimeMs: 60000,
-		})
-		setCurrentTrackIndex(Number(track.id) - 1)
-		setNeedsTrackLoad(false)
+	const handleTrackSelect = (selectedTrack: AudioProTrack) => {
+		const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url)
+
+		if (trackIndex === -1) return
+
+		const isQueueChanging = id !== activeQueueId
+
+		const beforeTracks = tracks.slice(0, trackIndex)
+		const afterTracks = tracks.slice(trackIndex + 1)
+
+		clearQueue()
+		addNextToQueue(selectedTrack)
+		addToQueue(afterTracks)
+		addToQueue(beforeTracks)
+
+		AudioPro.play(selectedTrack, { autoPlay })
+
+		queueOffset.current
+		setActiveQueueId(id)
+		setCurrentTrackIndex(0)
 	}
 
 	return (
