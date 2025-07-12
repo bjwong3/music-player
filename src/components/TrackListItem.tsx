@@ -1,8 +1,8 @@
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
 import { AudioProState } from '@/helpers/audioProValues'
+import { TrackWithPlaylist } from '@/helpers/types'
 import { defaultStyles } from '@/styles'
-import { AudioProTrack } from '@/types/audioProTypes'
 import FastImage from '@d11/react-native-fast-image'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
@@ -10,8 +10,8 @@ import { useAudioPro } from 'react-native-audio-pro'
 import LoaderKitView from 'react-native-loader-kit'
 
 export type TrackListItemProps = {
-	track: AudioProTrack
-	onTrackSelect: (track: AudioProTrack) => void
+	track: TrackWithPlaylist
+	onTrackSelect: (track: TrackWithPlaylist) => void
 }
 
 export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
@@ -25,7 +25,7 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 				<View>
 					<FastImage
 						source={{
-							uri: track.artwork ?? unknownTrackImageUri,
+							uri: track.img ?? unknownTrackImageUri,
 							priority: FastImage.priority.normal,
 						}}
 						style={{

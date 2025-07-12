@@ -10,12 +10,18 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { useAudioPro } from 'react-native-audio-pro'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { library } from './player-service'
 
 const PlayerScreen = () => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
-	const { imageColors } = usePlayerBackground(
-		(playingTrack?.artwork as string) ?? unknownTrackImageUri,
-	)
+
+	if (!playingTrack) return null
+
+	const libraryTrack = library.find((track) => track.url === playingTrack.url)
+	const trackArtwork = libraryTrack
+		? libraryTrack.img ?? unknownTrackImageUri
+		: unknownTrackImageUri
+	const { imageColors } = usePlayerBackground(trackArtwork)
 
 	const { top, bottom } = useSafeAreaInsets()
 
@@ -40,7 +46,7 @@ const PlayerScreen = () => {
 					<View style={styles.artworkImageContainer}>
 						<FastImage
 							source={{
-								uri: (playingTrack.artwork as string) ?? unknownTrackImageUri,
+								uri: trackArtwork,
 								priority: FastImage.priority.high,
 							}}
 							resizeMode="cover"

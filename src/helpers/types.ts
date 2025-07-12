@@ -1,6 +1,6 @@
 import { AudioProTrack } from '@/types/audioProTypes'
 
-export type TrackWithPlaylist = AudioProTrack & { playlist?: string[] }
+export type TrackWithPlaylist = AudioProTrack & { playlist?: string[]; img?: string }
 
 export type Playlist = {
 	name: string

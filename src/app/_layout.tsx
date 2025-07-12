@@ -18,6 +18,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 getAudioFiles(DownloadDirectoryPath)
+
 export default function App() {
 	const [currentIndex, setLocalIndex] = useState(getCurrentTrackIndex())
 	const currentTrack = library[currentIndex]

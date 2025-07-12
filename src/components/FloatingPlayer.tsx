@@ -1,3 +1,4 @@
+import { library } from '@/app/player-service'
 import { unknownTrackImageUri } from '@/constants/images'
 import { defaultStyles } from '@/styles'
 import FastImage from '@d11/react-native-fast-image'
@@ -20,11 +21,15 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 
 	const displayedTrack = playingTrack
 
+	const libraryTrack = library.find((track) => track.url === displayedTrack.url)
+
 	return (
 		<TouchableOpacity onPress={handlePress} activeOpacity={0.9} style={[styles.container, style]}>
 			<>
 				<FastImage
-					source={{ uri: (displayedTrack.artwork as string) ?? unknownTrackImageUri }}
+					source={{
+						uri: libraryTrack ? libraryTrack.img ?? unknownTrackImageUri : unknownTrackImageUri,
+					}}
 					style={styles.trackArtworkImage}
 				/>
 
