@@ -1,16 +1,33 @@
-import { useNavigationSearch } from '@/hooks/useNavigationSearch'
+import { StackScreenWithSearchBar } from '@/constants/layout'
+import { colors } from '@/constants/tokens'
 import { defaultStyles } from '@/styles'
-import { Text, View } from 'react-native'
+import { Stack } from 'expo-router'
+import { View } from 'react-native'
 
 const PlaylistsScreen = () => {
-	const search = useNavigationSearch({
-		searchBarOptions: {
-			placeholder: 'Search Playlists',
-		},
-	})
 	return (
 		<View style={defaultStyles.container}>
-			<Text style={defaultStyles.text}>Playlists screen</Text>
+			<Stack>
+				<Stack.Screen
+					name="index"
+					options={{
+						...StackScreenWithSearchBar,
+						headerTitle: 'Playlists',
+					}}
+				/>
+
+				<Stack.Screen
+					name="[name]"
+					options={{
+						headerTitle: '',
+						headerBackVisible: true,
+						headerStyle: {
+							backgroundColor: colors.background,
+						},
+						headerTintColor: colors.primary,
+					}}
+				/>
+			</Stack>
 		</View>
 	)
 }

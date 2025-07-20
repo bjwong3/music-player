@@ -3,11 +3,12 @@ import { unknownTrackImageUri } from '@/constants/images'
 import { defaultStyles } from '@/styles'
 import FastImage from '@d11/react-native-fast-image'
 import { useRouter } from 'expo-router'
-import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
+import { Pressable, StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
 import { useAudioPro } from 'react-native-audio-pro'
 import { MovingText } from './MovingText'
 import { NextButton, PlayPauseButton, PreviousButton } from './PlayerControls'
 
+// Player to show currently playing track when it gets selected
 export const FloatingPlayer = ({ style }: ViewProps) => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 
@@ -43,7 +44,9 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
 
 				<View style={styles.trackControlsContainer}>
 					<PreviousButton iconSize={22} />
-					<PlayPauseButton iconSize={22} />
+					<Pressable hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+						<PlayPauseButton iconSize={22} />
+					</Pressable>
 					<NextButton iconSize={22} />
 				</View>
 			</>

@@ -12,6 +12,7 @@ import { useAudioPro } from 'react-native-audio-pro'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { library } from './player-service'
 
+// Screen after clicking floating player
 const PlayerScreen = () => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 
@@ -91,7 +92,7 @@ const PlayerScreen = () => {
 							</View>
 							<PlayerProgressBar style={{ marginTop: 70 }} />
 
-							<PlayerControls style={{ marginTop: 70 }} />
+							<PlayerControls style={{ marginTop: 10 }} />
 						</View>
 					</View>
 				</View>

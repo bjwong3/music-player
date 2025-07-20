@@ -1,4 +1,4 @@
-import { library } from '@/app/player-service'
+import { library, shuffle } from '@/app/player-service'
 import { QueueControls } from '@/components/QueueControls'
 import { TracksList } from '@/components/TracksList'
 import { colors } from '@/constants/tokens'
@@ -34,7 +34,7 @@ const SongsScreen = () => {
 			<TracksList
 				id={generateTracksListId('songs', search)}
 				tracks={filteredSongs.length !== 0 ? filteredSongs : []}
-				scrollEnabled={false}
+				shuffle={shuffle}
 			/>
 		</View>
 	)

@@ -16,6 +16,7 @@ export type MovingTextProps = {
 	style?: StyleProps
 }
 
+// Text animation when track titles get too long
 export const MovingText = ({ text, animationThreshold, style }: MovingTextProps) => {
 	const translateX = useSharedValue(0)
 	const shouldAnimate = text.length >= animationThreshold

@@ -1,4 +1,4 @@
-import { MMKV, setCurrentTrackIndex, setQueue } from '@/app/player-service'
+import { setCurrentTrackIndex, setQueue } from '@/app/player-service'
 import { colors } from '@/constants/tokens'
 import { AudioPro } from '@/helpers/audioPro'
 import { defaultStyles } from '@/styles'
@@ -10,6 +10,7 @@ type QueueControlsProps = {
 	tracks: AudioProTrack[]
 } & ViewProps
 
+// Buttons to play current queue from the beginning or shuffle
 export const QueueControls = ({ tracks, style, ...viewProps }: QueueControlsProps) => {
 	const handlePlay = async () => {
 		await setQueue(tracks)
@@ -23,13 +24,6 @@ export const QueueControls = ({ tracks, style, ...viewProps }: QueueControlsProp
 		await setQueue(shuffledTracks)
 		await AudioPro.play(shuffledTracks[0])
 		setCurrentTrackIndex(0)
-	}
-
-	const handleRefresh = async () => {
-		MMKV.clearStore()
-		console.log('store cleared')
-		// const storeLibrary: TrackWithPlaylist[] = MMKV.getArray('library') ?? []
-		// console.log('lib: ' + storeLibrary[80].img)
 	}
 
 	return (
@@ -47,14 +41,6 @@ export const QueueControls = ({ tracks, style, ...viewProps }: QueueControlsProp
 				<TouchableOpacity onPress={handleShufflePlay} activeOpacity={0.8} style={styles.button}>
 					<Ionicons name="shuffle-sharp" size={24} color={colors.primary} />
 					<Text style={styles.buttonText}>Shuffle</Text>
-				</TouchableOpacity>
-			</View>
-
-			{/* Scan for Songs */}
-			<View style={{ flex: 1 }}>
-				<TouchableOpacity onPress={handleRefresh} activeOpacity={0.8} style={styles.button}>
-					<Ionicons name="refresh" size={24} color={colors.primary} />
-					<Text style={styles.buttonText}>Refresh</Text>
 				</TouchableOpacity>
 			</View>
 		</View>

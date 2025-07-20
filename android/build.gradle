@@ -17,6 +17,10 @@ buildscript {
   }
 }
 
+project.ext {
+    excludeAppGlideModule = true
+}
+
 def reactNativeAndroidDir = new File(
   providers.exec {
     workingDir(rootDir)

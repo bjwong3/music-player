@@ -1,6 +1,7 @@
 import { unknownTrackImageUri } from '@/constants/images'
-import { TrackWithPlaylist } from '@/helpers/types'
+import { Playlist, TrackWithPlaylist } from '@/helpers/types'
 import { AudioProTrack } from '@/types/audioProTypes'
+import { useRouter } from 'expo-router'
 import jsmediatags from 'jsmediatags'
 import { PermissionsAndroid } from 'react-native'
 import { AudioProContentType, AudioProEvent, AudioProEventType } from 'react-native-audio-pro'
@@ -14,8 +15,12 @@ let currentIndex = 0
 
 export const MMKV = new MMKVLoader().initialize()
 
+const router = useRouter()
+
 export let library: TrackWithPlaylist[] = MMKV.getArray('library') ?? playlist
+export let playlists: Playlist[] = MMKV.getArray('playlists') ?? []
 export let queue: AudioProTrack[] = []
+export let shuffle = true
 
 export function setupAudioPro(): void {
 	// Configure audio settings
@@ -134,6 +139,11 @@ const requestExternalStoragePermission = async () => {
 export const getAudioFiles = async (path: string) => {
 	const storeLibrary: TrackWithPlaylist[] = MMKV.getArray('library') ?? []
 	console.log('lib: ' + storeLibrary)
+	playlists.forEach((playlist) => {
+		playlist.tracks.forEach((track) => {
+			console.log(track.title)
+		})
+	})
 	if (await requestExternalStoragePermission()) {
 		try {
 			const result = await readDir(path)
@@ -187,37 +197,6 @@ export const getAudioFiles = async (path: string) => {
 				}),
 			)
 
-			// const updatedLibrary = audioFiles.map((file, index) => {
-			// 	let track: TrackWithPlaylist = {
-			// 		id: String(index),
-			// 		url: 'file://' + file.path,
-			// 		title: file.name.replace('.mp3', ''),
-			// 		artwork: unknownTrackImageUri,
-			// 		artist: 'Unknown Artist',
-			// 		playlist: [],
-			// 	}
-			// 	new jsmediatags.Reader(file.path).setTagsToRead(['title', 'artist', 'picture']).read({
-			// 		onSuccess: (tag) => {
-			// 			const trackTags = tag.tags
-			// 			console.log(trackTags.artist)
-			// 			track.artist = trackTags.artist ?? 'Unknown Artist'
-			// 			track.title = trackTags.title ?? file.name.replace('.mp3', '')
-
-			// 			if (trackTags.picture) {
-			// 				let base64String = ''
-			// 				for (let i = 0; i < trackTags.picture.data.length; i++) {
-			// 					base64String += String.fromCharCode(trackTags.picture.data[i])
-			// 				}
-			// 				const img = `data:${trackTags.picture.format};base64,${window.btoa(base64String)}`
-			// 				track.img = img
-			// 			}
-			// 		},
-			// 		onError: (error) => {
-			// 			console.log('Error reading tags for' + file.path + ':', error)
-			// 		},
-			// 	})
-			// 	return track
-			// })
 			MMKV.setArray('library', updatedLibrary)
 			console.log('Done updating library')
 			library = updatedLibrary
@@ -225,4 +204,64 @@ export const getAudioFiles = async (path: string) => {
 			console.error('Directory Read Error: ', error)
 		}
 	}
+}
+
+export const addToPlaylist = async (newTrack: AudioProTrack, selectedPlaylist: string) => {
+	const updatedPlaylists = playlists.map((playlist) => {
+		if (playlist.name === selectedPlaylist) {
+			playlist.tracks = [...playlist.tracks, newTrack]
+		}
+		return playlist
+	})
+
+	const updatedLibrary = library.map((track) => {
+		if (track.url === newTrack.url) {
+			track.playlist = track.playlist ? [...track.playlist, selectedPlaylist] : [selectedPlaylist]
+		}
+		return track
+	})
+
+	playlists = updatedPlaylists
+	library = updatedLibrary
+
+	MMKV.setArray('playlists', updatedPlaylists)
+	MMKV.setArray('library', updatedLibrary)
+}
+
+export const removeFromPlaylist = async (selectedTrack: string, currentPlaylist: string) => {
+	const updatedPlaylists = playlists.map((playlist) => {
+		if (playlist.name === currentPlaylist) {
+			playlist.tracks = playlist.tracks.filter((track) => track.url !== selectedTrack)
+		}
+		return playlist
+	})
+
+	const updatedLibrary = library.map((track) => {
+		if (track.url === selectedTrack) {
+			track.playlist = track.playlist?.filter((playlist) => playlist !== currentPlaylist)
+		}
+		return track
+	})
+
+	playlists = updatedPlaylists
+	library = updatedLibrary
+
+	MMKV.setArray('playlists', updatedPlaylists)
+	MMKV.setArray('library', updatedLibrary)
+}
+
+export const createPlaylist = async (newPlaylist: Playlist) => {
+	const updatedPlaylists = [...playlists, newPlaylist]
+	MMKV.setArray('playlists', updatedPlaylists)
+	playlists = updatedPlaylists
+}
+
+export const deletePlaylist = async (selectedPlaylist: Playlist) => {
+	const updatedPlaylists = playlists.filter((playlist) => playlist.name !== selectedPlaylist.name)
+	MMKV.setArray('playlists', updatedPlaylists)
+	playlists = updatedPlaylists
+}
+
+export const toggleShuffle = async () => {
+	shuffle = !shuffle
 }

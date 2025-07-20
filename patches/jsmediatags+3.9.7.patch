@@ -1,0 +1,16 @@
+diff --git a/node_modules/jsmediatags/dist/jsmediatags.min.js b/node_modules/jsmediatags/dist/jsmediatags.js
+similarity index 100%
+rename from node_modules/jsmediatags/dist/jsmediatags.min.js
+rename to node_modules/jsmediatags/dist/jsmediatags.js
+diff --git a/node_modules/jsmediatags/package.json b/node_modules/jsmediatags/package.json
+index 1265c61..e93b662 100644
+--- a/node_modules/jsmediatags/package.json
++++ b/node_modules/jsmediatags/package.json
+@@ -19,7 +19,6 @@
+     }
+   ],
+   "main": "build2/jsmediatags.js",
+-  "browser": "dist/jsmediatags.js",
+   "repository": {
+     "type": "git",
+     "url": "git+https://github.com/aadsm/jsmediatags.git"

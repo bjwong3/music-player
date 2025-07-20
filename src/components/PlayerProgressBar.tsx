@@ -11,6 +11,7 @@ import {
 	useSharedValue,
 } from 'react-native-reanimated'
 
+// Currently playing track progress component
 export const PlayerProgressBar = ({ style }: ViewProps) => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 

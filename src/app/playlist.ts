@@ -6,6 +6,7 @@ export type Track = {
 	artist: string
 }
 
+// Default playlist if no MP3 files are found in download directory
 export const playlist: Track[] = [
 	{
 		id: '1',

@@ -1,7 +1,8 @@
-import { playNextTrack, playPreviousTrack } from '@/app/player-service'
+import { playNextTrack, playPreviousTrack, shuffle, toggleShuffle } from '@/app/player-service'
 import { colors } from '@/constants/tokens'
 import { AudioPro } from '@/helpers/audioPro'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { useState } from 'react'
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { AudioProState, useAudioPro } from 'react-native-audio-pro'
 
@@ -17,6 +18,9 @@ type PlayerButtonProps = {
 export const PlayerControls = ({ style }: PlayerControlsProps) => {
 	return (
 		<View style={[styles.container, style]}>
+			<View style={{ alignItems: 'center', marginBottom: 30 }}>
+				<ShuffleButton />
+			</View>
 			<View style={styles.row}>
 				<PreviousButton />
 				<PlayPauseButton />
@@ -52,6 +56,23 @@ export const PreviousButton = ({ iconSize = 30 }: PlayerButtonProps) => {
 	return (
 		<TouchableOpacity activeOpacity={0.7} onPress={() => playPreviousTrack(position)}>
 			<FontAwesome6 name="backward" size={iconSize} color={colors.text} />
+		</TouchableOpacity>
+	)
+}
+
+export const ShuffleButton = ({ iconSize = 30 }: PlayerButtonProps) => {
+	const [shuffleEnabled, setShuffleEnabled] = useState(shuffle)
+	const handleShufflePress = () => {
+		setShuffleEnabled(!shuffleEnabled)
+		toggleShuffle()
+	}
+	return (
+		<TouchableOpacity activeOpacity={0.7} onPress={handleShufflePress}>
+			<FontAwesome6
+				name="shuffle"
+				size={iconSize}
+				color={shuffleEnabled ? colors.text : colors.textMuted}
+			/>
 		</TouchableOpacity>
 	)
 }

@@ -1,9 +1,8 @@
 import { shuffle } from '@/app/player-service'
-import { unknownArtistImageUri } from '@/constants/images'
 import { fontSize } from '@/constants/tokens'
 import { trackTitleFilter } from '@/helpers/filter'
 import { generateTracksListId } from '@/helpers/miscellaneous'
-import { Artist } from '@/helpers/types'
+import { Playlist } from '@/helpers/types'
 import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { defaultStyles } from '@/styles'
 import FastImage from '@d11/react-native-fast-image'
@@ -12,69 +11,69 @@ import { StyleSheet, Text, View } from 'react-native'
 import { QueueControls } from './QueueControls'
 import { TracksList } from './TracksList'
 
-// Display selected artist's tracks
-export const ArtistTracksList = ({ artist }: { artist: Artist }) => {
+// Displays tracks for currently selected playlist
+export const PlaylistTracksList = ({ playlist }: { playlist: Playlist }) => {
 	const search = useNavigationSearch({
 		searchBarOptions: {
 			hideWhenScrolling: true,
-			placeholder: 'Search songs',
+			placeholder: 'Find in playlist',
 		},
 	})
 
-	const filteredArtistTracks = useMemo(() => {
-		return artist.tracks.filter(trackTitleFilter(search))
-	}, [artist.tracks, search])
+	const filteredPlaylistTracks = useMemo(() => {
+		return playlist.tracks.filter(trackTitleFilter(search))
+	}, [playlist.tracks, search])
 
 	return (
 		<View style={{ paddingBottom: 33 }}>
 			<TracksList
-				id={generateTracksListId(artist.name, search)}
+				id={generateTracksListId(playlist.name, search)}
 				shuffle={shuffle}
-				ListHeaderComponentStyle={styles.artistHeaderContainer}
+				ListHeaderComponentStyle={styles.playlistHeaderContainer}
 				ListHeaderComponent={
 					<View>
 						<View style={styles.artworkImageContainer}>
 							<FastImage
 								source={{
-									uri: unknownArtistImageUri,
+									uri: playlist.artworkPreview,
 									priority: FastImage.priority.high,
 								}}
-								style={styles.artistImage}
+								style={styles.artworkImage}
 							/>
 						</View>
 
-						<Text numberOfLines={1} style={styles.artistNameText}>
-							{artist.name}
+						<Text numberOfLines={1} style={styles.playlistNameText}>
+							{playlist.name}
 						</Text>
 
 						{search.length === 0 && (
-							<QueueControls tracks={filteredArtistTracks} style={{ paddingTop: 24 }} />
+							<QueueControls style={{ paddingTop: 24 }} tracks={playlist.tracks} />
 						)}
 					</View>
 				}
-				tracks={filteredArtistTracks}
+				tracks={filteredPlaylistTracks}
 			/>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
-	artistHeaderContainer: {
+	playlistHeaderContainer: {
 		flex: 1,
 		marginBottom: 32,
 	},
 	artworkImageContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		height: 100,
+		height: 300,
 	},
-	artistImage: {
-		width: '25%',
+	artworkImage: {
+		width: '85%',
 		height: '100%',
 		resizeMode: 'cover',
-		borderRadius: 128,
+		borderRadius: 12,
 	},
-	artistNameText: {
+	playlistNameText: {
 		...defaultStyles.text,
 		marginTop: 22,
 		textAlign: 'center',

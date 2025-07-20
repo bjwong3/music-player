@@ -5,15 +5,18 @@ import { TrackWithPlaylist } from '@/helpers/types'
 import { defaultStyles } from '@/styles'
 import FastImage from '@d11/react-native-fast-image'
 import { Entypo, Ionicons } from '@expo/vector-icons'
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { useAudioPro } from 'react-native-audio-pro'
 import LoaderKitView from 'react-native-loader-kit'
+import { TrackShortcutsMenu } from './TrackShortcutsMenu'
+import { StopPropagation } from './utils/StopPropagation'
 
 export type TrackListItemProps = {
 	track: TrackWithPlaylist
 	onTrackSelect: (track: TrackWithPlaylist) => void
 }
 
+// Displays individual track info
 export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: TrackListItemProps) => {
 	const { state, position, duration, playingTrack, playbackSpeed, volume, error } = useAudioPro()
 	const isActiveTrack = playingTrack?.id === track.id
@@ -78,7 +81,14 @@ export const TrackListItem = ({ track, onTrackSelect: handleTrackSelect }: Track
 						)}
 					</View>
 
-					<Entypo name="dots-three-horizontal" size={20} style={{ color: 'white' }} />
+					{/* Track Options (Add to playlist) */}
+					<StopPropagation>
+						<TrackShortcutsMenu track={track}>
+							<Pressable hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+								<Entypo name="dots-three-horizontal" size={20} style={{ color: 'white' }} />
+							</Pressable>
+						</TrackShortcutsMenu>
+					</StopPropagation>
 				</View>
 			</View>
 		</TouchableHighlight>
