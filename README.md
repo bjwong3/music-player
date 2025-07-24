@@ -1,6 +1,6 @@
 # Music Player App
 
-A cross-platform music player built with React Native and Expo, designed for local audio playback, playlist management, and a modern, responsive user interface. This project demonstrates advanced mobile development skills, including file system access, custom audio controls, and dynamic UI updates.
+A cross-platform music player built with React Native and Expo, designed for local audio playback, playlist management, and a modern, responsive user interface. This project demonstrates mobile development skills, including file system access, custom audio controls, and dynamic UI updates.
 
 ---
 
