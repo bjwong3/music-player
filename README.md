@@ -1,50 +1,102 @@
-# Welcome to your Expo app 👋
+# Music Player App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform music player built with React Native and Expo, designed for local audio playback, playlist management, and a modern, responsive user interface. This project demonstrates advanced mobile development skills, including file system access, custom audio controls, and dynamic UI updates.
 
-## Get started
+---
 
-1. Install dependencies
+## Features
+
+- **Local Audio Library Scanning**
+
+  - Automatically scans the device for `.mp3` files and extracts metadata (title, artist, album art) for a seamless music library experience.
+  - ![GIF: Scanning and loading local music files](#)
+
+- **Modern Player Interface**
+
+  - Floating mini-player for quick access to playback controls from anywhere in the app.
+  - Full player screen with animated backgrounds, track details, and progress bar.
+  - ![GIF: Floating player and full player transition](#)
+
+- **Playlist Management**
+
+  - Create, edit, and delete playlists.
+  - Add or remove tracks from playlists via contextual menus.
+  - ![GIF: Creating and managing playlists](#)
+
+- **Artist and Song Browsing**
+
+  - Browse your library by artist or by all songs.
+  - Search and filter functionality for quick navigation.
+  - ![GIF: Browsing by artist and searching songs](#)
+
+- **Queue and Shuffle Controls**
+
+  - Play or shuffle the entire library or any playlist with a single tap.
+  - ![GIF: Shuffle and play queue controls](#)
+
+- **Persistent State**
+
+  - Uses local storage to persist the music library, playlists, and playback state across app restarts.
+
+- **Responsive and Accessible UI**
+  - Built with accessibility and responsiveness in mind for a consistent experience across devices.
+
+---
+
+## Getting Started
+
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Start the app**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   - Open in a development build, Android emulator, iOS simulator, or Expo Go.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. **Reset the project (optional)**
+   ```bash
+   npm run reset-project
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## Technical Highlights
 
-When you're ready, run:
+- **React Native & Expo**: Leverages Expo for rapid development and deployment.
+- **File System Access**: Reads device storage to build a dynamic music library.
+- **Custom Audio Engine**: Integrates with `react-native-audio-pro` for advanced playback features.
+- **State Management**: Uses local storage and React state for persistence and reactivity.
+- **TypeScript**: Ensures type safety and maintainability.
 
-```bash
-npm run reset-project
-```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Project Structure
 
-## Learn more
+- `src/app/` – Main app screens and navigation
+- `src/components/` – Reusable UI components (player, lists, controls)
+- `src/helpers/` – Utility functions and types
+- `src/store/` – State management
+- `src/constants/` – Theme and layout constants
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Screenshots & GIFs
 
-## Join the community
+> _Replace the placeholders above with actual GIFs or screenshots to visually demonstrate the user experience and features._
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Why This Project?
+
+This app was built as a hands-on opportunity to:
+
+- Explore mobile UI/UX design principles
+- Gain experience with native device integration (file system, audio)
+- Learn state management and persistence techniques in a real-world context
+- Develop modular, maintainable code architecture using modern tools
