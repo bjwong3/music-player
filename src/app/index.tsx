@@ -15,7 +15,7 @@ export default function HomeScreen() {
 	const router = useRouter()
 
 	useFocusEffect(() => {
-		router.replace('/(tabs)')
+		router.replace('/(tabs)/(songs)')
 	})
 
 	return <Text>Home Screen</Text>

@@ -103,7 +103,7 @@ export function clearQueue(): void {
 }
 
 export function addNextToQueue(track: AudioProTrack): void {
-	queue.splice(1, 0, track)
+	queue.splice(currentIndex + 1, 0, track)
 }
 
 export function addToQueue(tracks: AudioProTrack[]): void {

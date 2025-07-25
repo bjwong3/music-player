@@ -1,8 +1,8 @@
-import { removeFromPlaylist } from '@/app/player-service'
+import { addNextToQueue, removeFromPlaylist } from '@/app/player-service'
+import { AudioProTrack } from '@/types/audioProTypes'
 import { MenuView } from '@react-native-menu/menu'
 import { usePathname, useRouter } from 'expo-router'
 import { PropsWithChildren } from 'react'
-import { AudioProTrack } from 'react-native-audio-pro'
 import { match } from 'ts-pattern'
 
 type TrackShortcutsMenuProps = PropsWithChildren<{ track: AudioProTrack }>
@@ -17,6 +17,9 @@ export const TrackShortcutsMenu = ({ track, children }: TrackShortcutsMenuProps)
 
 	const handlePressAction = (id: string) => {
 		match(id)
+			.with('add-next-to-queue', () => {
+				addNextToQueue(track as AudioProTrack)
+			})
 			.with('add-to-playlist', () => {
 				router.push({ pathname: '../(modals)/addToPlaylist', params: { trackUrl: track.url } })
 			})
@@ -31,6 +34,11 @@ export const TrackShortcutsMenu = ({ track, children }: TrackShortcutsMenuProps)
 		<MenuView
 			onPressAction={({ nativeEvent: { event } }) => handlePressAction(event)}
 			actions={[
+				{
+					id: 'add-next-to-queue',
+					title: isPlaylistRoute ? 'Remove from playlist' : 'Add next to queue',
+					image: 'ic_menu_add',
+				},
 				{
 					id: isPlaylistRoute ? 'remove-from-playlist' : 'add-to-playlist',
 					title: isPlaylistRoute ? 'Remove from playlist' : 'Add to playlist',
