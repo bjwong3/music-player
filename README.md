@@ -13,20 +13,20 @@ A cross-platform music player built with React Native and Expo, designed for loc
 - **Modern Player Interface**
 
   - Floating mini-player for quick access to playback controls from anywhere in the app.
-  - Full player screen with animated backgrounds, track details, and progress bar.
-  - ![Floating player and full player transition](assets/gifs/songs_tab.gif)
+  - Full player screen with animated backgrounds, track details, and progress bar.  
+    <img src="https://github.com/bjwong3/music-player/blob/master/assets/gifs/songs_tab.gif" width="300">
 
 - **Playlist Management**
 
   - Create, edit, and delete playlists.
-  - Add or remove tracks from playlists via contextual menus.
-  - ![Creating and managing playlists](assets/gifs/playlists_tab.gif)
+  - Add or remove tracks from playlists via contextual menus.  
+    <img src="https://github.com/bjwong3/music-player/blob/master/assets/gifs/playlists_tab.gif" width="300">
 
 - **Artist and Song Browsing**
 
   - Browse your library by artist or by all songs.
-  - Search and filter functionality for quick navigation.
-  - ![Browsing by artist and searching songs](assets/gifs/artists_tab.gif)
+  - Search and filter functionality for quick navigation.  
+    <img src="https://github.com/bjwong3/music-player/blob/master/assets/gifs/artists_tab.gif" width="300">
 
 - **Queue and Shuffle Controls**
 
@@ -58,11 +58,6 @@ A cross-platform music player built with React Native and Expo, designed for loc
 
    - Open in a development build, Android emulator, iOS simulator, or Expo Go.
 
-3. **Reset the project (optional)**
-   ```bash
-   npm run reset-project
-   ```
-
 ---
 
 ## Technical Highlights
@@ -77,17 +72,17 @@ A cross-platform music player built with React Native and Expo, designed for loc
 
 ## Project Structure
 
-The following tree illustrates the high-level structure of the project:
-
+```
 src/
-├── app/ # Main app screens and navigation
-├── components/ # Reusable UI components (player, lists, controls)
-├── helpers/ # Utility functions and types
-├── store/ # State management
-├── constants/ # Theme and layout constants
-├── hooks/ # Custom React hooks
-├── types/ # TypeScript type definitions
-└── styles/ # Shared styles
+├── app/         # Main app screens and navigation
+├── components/  # Reusable UI components (player, lists, controls)
+├── constants/   # Theme and layout constants
+├── helpers/     # Utility functions and types
+├── hooks/       # Custom React hooks
+├── store/       # State management
+├── styles/      # Shared styles
+└── types/       # TypeScript type definitions
+```
 
 ---
 
